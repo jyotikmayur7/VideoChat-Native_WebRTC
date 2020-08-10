@@ -15,6 +15,7 @@ const Room = (props) => {
             userStream.current = stream;
 
             socketRef.current = io.connect("/");
+            // Pulling out the parameters from the URL (using react-router-dom)
             socketRef.current.emit("join room", props.match.params.roomID);
 
         });

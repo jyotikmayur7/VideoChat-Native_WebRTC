@@ -4,6 +4,7 @@ import { v1 as uuid } from 'uuid';
 const CreateRoom = (props) => {
     function create() {
         const id = uuid();
+        // Adding parameters to URL
         props.history.push(`/room/${id}`);
     }
 
