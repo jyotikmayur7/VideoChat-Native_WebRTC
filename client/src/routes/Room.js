@@ -18,6 +18,15 @@ const Room = (props) => {
             // Pulling out the parameters from the URL (using react-router-dom)
             socketRef.current.emit("join room", props.match.params.roomID);
 
+            socketRef.current.on("other user", userID => {
+                callUser(userID);
+                otherUser.current = userID;
+            })
+
+            socketRef.current.on("user joined", userID => {
+                otherUser.current = userID;
+            })
+
         });
     }, []);
 
