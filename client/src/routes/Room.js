@@ -27,6 +27,12 @@ const Room = (props) => {
                 otherUser.current = userID;
             })
 
+            socketRef.current.on("offer", handleReceiveCall);
+
+            socketRef.cuurent.on("answer", handleAnswer);
+
+            socketRef.cuurent.on("ice-candidate", handleNewICECandidateMsg);
+
         });
     }, []);
 
