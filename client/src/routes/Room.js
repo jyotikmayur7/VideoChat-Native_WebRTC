@@ -41,6 +41,26 @@ const Room = (props) => {
         userStream.current.getTracks().forEach(track => peerRef.current.addTrack(track, userStream.current));
     }
 
+    function createPeer(userID) {
+        const peer = new RTCPeerConnection({
+            iceServers: [
+                {
+                    urls: "stun:stun:stunprotocol.org"
+                },
+                {
+                    urls: 'turn:numb.viagenie.ca',
+                    credential: 'jyotik',
+                    username: 'webrtc@live.com'
+                }
+            ]
+        })
+        peer.onicecandidate = handleICECandidateEvent;
+        peer.ontrack = handleTrackEvent;
+        peer.onnegotiationneeded = () => handleNegotiationNeededEvent(userID);
+
+        return peer;
+    }
+
     return (
         <div>
             <vedio autoplay ref={userVideo}></vedio>
