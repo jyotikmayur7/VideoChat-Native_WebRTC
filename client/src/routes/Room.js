@@ -94,7 +94,7 @@ const Room = (props) => {
         })
     }
 
-
+    // This completes the peer to peer handshake
     function handleAnswer(message) {
         const desc = new RTCSessionDescription(message.sdp);
         peerRef.current.setRemoteDescription(desc).catch(e => console.log(e));
