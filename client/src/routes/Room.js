@@ -95,6 +95,11 @@ const Room = (props) => {
     }
 
 
+    function handleAnswer(message) {
+        const desc = new RTCSessionDescription(message.sdp);
+        peerRef.current.setRemoteDescription(desc).catch(e => console.log(e));
+    }
+
     return (
         <div>
             <vedio autoplay ref={userVideo}></vedio>
