@@ -110,6 +110,13 @@ const Room = (props) => {
         }
     }
 
+    function handleNewICECandidateMsg(incoming) {
+        const candidate = new RTCIceCandidate(incoming);
+
+        peerRef.current.addIceCandidate(candidate)
+            .catch(e => console.log(e));
+    }
+
     return (
         <div>
             <vedio autoplay ref={userVideo}></vedio>
