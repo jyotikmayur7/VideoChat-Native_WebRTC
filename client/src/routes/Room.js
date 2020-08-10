@@ -11,7 +11,7 @@ const Room = (props) => {
 
     useEffect(() => {
         navigator.mediaDevices.getUserMedia({ audio: true, vedio: true }).then(stream => {
-            userVedio.cuurent.srcObject = stream;
+            userVideo.cuurent.srcObject = stream;
             userStream.current = stream;
 
             socketRef.current = io.connect("/");
@@ -35,6 +35,11 @@ const Room = (props) => {
 
         });
     }, []);
+
+    function callUser(userID) {
+        peerRef.current = createPeer(userID);
+        userStream.current.getTracks().forEach(track => peerRef.current.addTrack(track, userStream.current));
+    }
 
     return (
         <div>
