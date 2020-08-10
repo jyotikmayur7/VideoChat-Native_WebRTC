@@ -9,6 +9,13 @@ const Room = (props) => {
     const otherUser = useRef();
     const userStream = useRef();
 
+    useEffect(() => {
+        navigator.mediaDevices.getUserMedia({ audio: true, vedio: true }).then(stream => {
+            userVedio.cuurent.srcObject = stream;
+            userStream.current = stream;
+        });
+    }, []);
+
     return (
         <div>
             <vedio autoplay ref={userVideo}></vedio>
