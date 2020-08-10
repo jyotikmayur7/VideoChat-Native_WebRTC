@@ -32,6 +32,11 @@ io.on('connection', socket => {
     socket.on("answer", payload => {
         io.to(payload.target).emit("answer", payload);
     })
+
+    // Both candidates are sending thier ice-candidate for making sure both the users agree on some terms for peer to peer connection
+    socket.on("ice-candidate", incoming => {
+        it.to(incoming.target).emit("ice-candidate", incoming.candidate);
+    })
 })
 
 server.listen(8000, () => console.log('Server is running on port 8000'));
