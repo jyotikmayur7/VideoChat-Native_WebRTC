@@ -11,7 +11,7 @@ const Room = (props) => {
 
     useEffect(() => {
         navigator.mediaDevices.getUserMedia({ audio: true, vedio: true }).then(stream => {
-            userVideo.cuurent.srcObject = stream;
+            userVideo.current.srcObject = stream;
             userStream.current = stream;
 
             socketRef.current = io.connect("/");
@@ -29,9 +29,9 @@ const Room = (props) => {
 
             socketRef.current.on("offer", handleReceiveCall);
 
-            socketRef.cuurent.on("answer", handleAnswer);
+            socketRef.current.on("answer", handleAnswer);
 
-            socketRef.cuurent.on("ice-candidate", handleNewICECandidateMsg);
+            socketRef.current.on("ice-candidate", handleNewICECandidateMsg);
 
         });
     }, []);
@@ -59,6 +59,20 @@ const Room = (props) => {
         peer.onnegotiationneeded = () => handleNegotiationNeededEvent(userID);
 
         return peer;
+    }
+
+    function handleNegotiationNeededEvent(userID) {
+        peerRef.current.createOffer().then(offer => {
+            return peerRef.current.setLocalDescription(offer);
+        }).then(() => {
+            const payload = {
+                target: userID,
+                caller: socketRef.current.id,
+                sdp: peerRef.current.localDescription
+            };
+
+            socketRef.current.emit("offer", payload)
+        }).catch(e => console.log(e));
     }
 
     return (
