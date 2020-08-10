@@ -9,14 +9,14 @@ const io = socket(server);
 const rooms = {};
 
 io.on('connection', socket => {
-    socket.on('join room', roomId => {
-        if (rooms[roomId]) {
-            rooms[roomId].push(socket.id);
+    socket.on('join room', roomID => {
+        if (rooms[roomID]) {
+            rooms[roomID].push(socket.id);
         } else {
-            romms[roomId] = [socket.id];
+            romms[roomID] = [socket.id];
         }
 
-        const otherUser = rooms[roomId].find(id => id !== socket.id);
+        const otherUser = rooms[roomID].find(id => id !== socket.id);
         if (otherUser) {
             socket.emit("other user", otherUser);
             socket.to(otherUser).emit("user joined", socket.id);

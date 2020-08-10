@@ -13,6 +13,10 @@ const Room = (props) => {
         navigator.mediaDevices.getUserMedia({ audio: true, vedio: true }).then(stream => {
             userVedio.cuurent.srcObject = stream;
             userStream.current = stream;
+
+            socketRef.current = io.connect("/");
+            socketRef.current.emit("join room", props.match.params.roomID);
+
         });
     }, []);
 
