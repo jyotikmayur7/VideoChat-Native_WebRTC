@@ -22,6 +22,11 @@ io.on('connection', socket => {
             socket.to(otherUser).emit("user joined", socket.id);
         }
     })
+
+    // Sending offer from current user to other user
+    socket.on("offer", payload => {
+        io.to(payload.target).emit("offer", payload);
+    })
 })
 
 server.listen(8000, () => console.log('Server is running on port 8000'));
