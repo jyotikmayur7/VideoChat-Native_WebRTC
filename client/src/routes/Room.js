@@ -27,7 +27,7 @@ const Room = (props) => {
                 otherUser.current = userID;
             })
 
-            socketRef.current.on("offer", handleReceiveCall);
+            socketRef.current.on("offer", handleRecieveCall);
 
             socketRef.current.on("answer", handleAnswer);
 
@@ -74,6 +74,26 @@ const Room = (props) => {
             socketRef.current.emit("offer", payload)
         }).catch(e => console.log(e));
     }
+
+    function handleRecieveCall(incoming) {
+        peerRef.current = createPeer();
+        const desc = new RTCSessionDescription(incoming.sdp);
+        peerRef.current.setRemoteDescription(desc).then(() => {
+            userStream.current.getTracks().forEach(track => peerRef.current.addTrack(track, userStream.current));
+        }).then(() => {
+            return peerRef.current.createAnswer();
+        }).then(answer => {
+            return peerRef.current.setLocalDescription(answer);
+        }).then(() => {
+            const payload = {
+                target: incoming.caller,
+                caller: socketRef.current.id,
+                sdp: peerRef.current.localDescription
+            }
+            socketRef.current.emit("answer", payload);
+        })
+    }
+
 
     return (
         <div>
